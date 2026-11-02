@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Beauty Bliss - Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="login-box">
+        <h1>Beauty Bliss</h1>
+        <h3>Login to Your Account</h3>
+
+        <input type="text" id="username" placeholder="Enter Username">
+
+        <input type="password" id="password" placeholder="Enter Password">
+
+        <button onclick="login()">Login</button>
+
+        <p id="message"></p>
+        <p>Don't have an account?
+    <a href="signup.html">Sign Up</a>
+</p>
+    </div>
+
+    <script>
+        function login() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            if (username == "" || password == "") {
+                document.getElementById("message").innerHTML =
+                    "Please enter username and password";
+            }
+            else {
+                localStorage.setItem("username", username);
+                window.location.href = "index.html";
+            }
+        }
+    </script>
+
+</body>
+</html>

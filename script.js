@@ -2,7 +2,21 @@
 var products = [];
 var cart = [];
 var wishlist = [];
+var username = localStorage.getItem("username");
 
+var username = localStorage.getItem("username");
+
+if (!username) {
+    window.location.href = "login.html";
+}
+else {
+    document.getElementById("welcomeUser").innerHTML = username;
+}
+
+function logout() {
+    localStorage.removeItem("username");
+    window.location.href = "login.html";
+}
 // Load products
 
 async function loadProducts() {

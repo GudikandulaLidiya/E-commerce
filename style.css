@@ -595,3 +595,46 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+/* Login Page */
+
+.login-box {
+    width: 350px;
+    margin: 100px auto;
+    padding: 30px;
+    text-align: center;
+    background-color: white;
+    border: 1px solid #f3c6d8;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.login-box h1 {
+    color: #e75480;
+}
+
+.login-box input {
+    width: 90%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid pink;
+    border-radius: 6px;
+}
+
+.login-box button {
+    width: 95%;
+    padding: 12px;
+    margin-top: 15px;
+    background-color: #e75480;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.login-box button:hover {
+    background-color: #d6336c;
+}
+
+#message {
+    color: red;
+}
