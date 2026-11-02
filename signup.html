@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,7 +28,7 @@
 
     <script>
         function signup() {
-            var username = document.getElementById("newUsername").value;
+            var username = document.getElementById("newUsername").value.trim();
             var password = document.getElementById("newPassword").value;
             var confirmPassword = document.getElementById("confirmPassword").value;
 
@@ -41,19 +41,34 @@
                     "Passwords do not match";
             }
             else {
-                var user = {
-                    username: username,
-                    password: password
-                };
+                var users = JSON.parse(localStorage.getItem("users")) || [];
 
-                localStorage.setItem("user", JSON.stringify(user));
+                var exists = users.some(function(u) {
+                    return u.username.toLowerCase() == username.toLowerCase();
+                });
 
-                alert("Account created successfully!");
+                if (exists) {
+                    document.getElementById("message").innerHTML =
+                        "Username already exists";
+                }
+                else {
+                    var user = {
+                        username: username,
+                        password: password
+                    };
 
-                window.location.href = "login.html";
+                    users.push(user);
+
+                    localStorage.setItem("users", JSON.stringify(users));
+
+                    alert("Account created successfully!");
+
+                    window.location.href = "login.html";
+                }
             }
         }
     </script>
 
 </body>
 </html>
+```

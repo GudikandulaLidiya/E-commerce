@@ -9,17 +9,46 @@
 
     <!-- Top Bar -->
 
-    <div class="top-bar">
-        <button onclick="logout()">Logout</button>
+   <!-- Top Bar -->
 
-        <h1>Beauty Products Shopping</h1>
+<div class="top-bar">
+
+    <h1>Beauty Products Shopping</h1>
+
+    <div class="top-actions">
 
         <button class="wishlist-icon" onclick="toggleWishlistPanel()">
             ♥
             <span id="wishlistCount">0</span>
         </button>
 
+        <div class="profile-menu">
+
+            <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                 class="profile-pic"
+                 onclick="toggleProfile()">
+
+       <div id="profileDropdown" class="profile-dropdown">
+
+    <h3 id="profileUsername"></h3>
+
+    <label for="profileUpload">Change Profile Picture</label>
+    <input type="file" id="profileUpload" accept="image/*"
+           onchange="changeProfilePicture()">
+
+    <p onclick="showProfile()">My Profile</p>
+    <p onclick="showMyOrders()">My Orders</p>
+    <p onclick="logout()">Logout</p>
+
+</div>
+<div id="profileDetails" class="profile-details" style="display:none;">
+</div>
+
+        </div>
+
     </div>
+
+</div>
 
     <!-- Wishlist Popup -->
 
@@ -112,10 +141,74 @@
             </table>
 
             <h3 id="grandTotal">Total: $0.00</h3>
+          
 
         </div>
 
     </div>
+    <!-- Checkout Section -->
+
+<div id="checkoutSection" class="checkout-section" style="display:none;">
+
+    <h2>Complete Your Order 💗</h2>
+
+    <form id="checkoutForm" onsubmit="placeOrder(event)">
+
+        <input type="text" id="customerName"
+               placeholder="Enter Your Full Name" required>
+
+        <input type="tel" id="customerPhone"
+               placeholder="Enter Mobile Number"
+               pattern="[0-9]{10}" required>
+
+        <textarea id="customerAddress"
+                  placeholder="Enter Delivery Address"
+                  required></textarea>
+
+        <input type="text" id="customerCity"
+               placeholder="Enter City" required>
+
+        <input type="text" id="customerPincode"
+               placeholder="Enter Pincode"
+               pattern="[0-9]{6}" required>
+
+        <h3>Select Payment Method</h3>
+
+        <label>
+            <input type="radio" name="payment"
+                   value="Cash on Delivery" checked>
+            Cash on Delivery
+        </label>
+
+        <label>
+            <input type="radio" name="payment"
+                   value="Online Payment">
+            Online Payment (Demo)
+        </label>
+
+        <h3 id="checkoutTotal">Total: $0.00</h3>
+
+        <button type="submit">Place Order</button>
+
+        <button type="button" onclick="closeCheckout()">
+            Cancel
+        </button>
+
+    </form>
+
+</div>
+
+<!-- Order Confirmation -->
+
+<div id="orderConfirmation" class="checkout-section"
+     style="display:none;">
+</div>
+
+<!-- My Orders -->
+
+<div id="myOrdersSection" class="checkout-section"
+     style="display:none;">
+</div>
 
     <!-- Footer -->
 

@@ -2,6 +2,8 @@
 var products = [];
 var cart = [];
 var wishlist = [];
+var checkoutItems = [];
+var checkoutType = "";
 var username = localStorage.getItem("username");
 
 var username = localStorage.getItem("username");
@@ -151,10 +153,13 @@ function displayProducts(list = products) {
                 <p class="new-price">
                     $${product.price.toFixed(2)}
                 </p>
+<button onclick="addToCart(${product.id})">
+    Add to Cart
+</button>
 
-                <button onclick="addToCart(${product.id})">
-                    Add to Cart
-                </button>
+<button onclick="buyNow(${product.id})">
+    Buy Now
+</button>
 
             </div>
         `;
@@ -332,7 +337,19 @@ function addToCart(id) {
 
     displayCart();
 }
+function toggleProfile() {
+    var profile = document.getElementById("profileDropdown");
 
+    if (profile.style.display == "block") {
+        profile.style.display = "none";
+    }
+    else {
+        profile.style.display = "block";
+    }
+
+    document.getElementById("profileUsername").innerHTML =
+        localStorage.getItem("username");
+}
 // Display cart
 
 function displayCart() {
@@ -412,3 +429,287 @@ function removeItem(index) {
 loadProducts();
 displayCart();
 displayWishlist();
+function showProfile() {
+    var username = localStorage.getItem("username");
+
+    document.getElementById("profileDetails").style.display = "block";
+
+    document.getElementById("profileDetails").innerHTML =
+        "<h2>My Profile</h2>" +
+        "<p><b>Username:</b> " + username + "</p>" +
+        "<button onclick='closeProfile()'>Close</button>";
+}
+
+function closeProfile() {
+    document.getElementById("profileDetails").style.display = "none";
+}
+function changeProfilePicture() {
+    var file = document.getElementById("profileUpload").files[0];
+
+    if (file) {
+        var reader = new FileReader();
+
+        reader.onload = function() {
+            localStorage.setItem(username + "_profilePicture", reader.result);
+            document.querySelector(".profile-pic").src = reader.result;
+        };
+
+        reader.readAsDataURL(file);
+    }
+}
+function loadProfilePicture() {
+    var picture = localStorage.getItem(username + "_profilePicture");
+
+    if (picture) {
+        document.querySelector(".profile-pic").src = picture;
+    }
+}
+
+document.addEventListener("click", function(event) {
+
+    var profile = document.querySelector(".profile-menu");
+    var dropdown = document.getElementById("profileDropdown");
+
+    if (!profile.contains(event.target)) {
+        dropdown.style.display = "none";
+    }
+
+});
+loadProfilePicture();
+
+// Buy Now - Direct purchase
+
+function buyNow(id) {
+    var product = products.find(function(p) {
+        return p.id === id;
+    });
+
+    if (!product) {
+        return;
+    }
+
+    checkoutItems = [{
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        quantity: 1
+    }];
+
+    checkoutType = "buyNow";
+
+    openCheckout();
+}
+
+
+// Cart Checkout
+
+function checkoutCart() {
+    if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+    }
+
+    checkoutItems = cart.map(function(item) {
+        return {
+            id: item.id,
+            title: item.title,
+            price: item.price,
+            quantity: item.quantity
+        };
+    });
+
+    checkoutType = "cart";
+
+    openCheckout();
+}
+
+
+// Open Checkout
+
+function openCheckout() {
+    document.getElementById("checkoutSection").style.display = "block";
+    document.getElementById("orderConfirmation").style.display = "none";
+    document.getElementById("myOrdersSection").style.display = "none";
+
+    var total = 0;
+
+    checkoutItems.forEach(function(item) {
+        total += item.price * item.quantity;
+    });
+
+    document.getElementById("checkoutTotal").innerHTML =
+        "Total: $" + total.toFixed(2);
+
+
+}
+
+
+// Close Checkout
+
+function closeCheckout() {
+    document.getElementById("checkoutSection").style.display = "none";
+}
+
+
+// Place Order
+
+function placeOrder(event) {
+    event.preventDefault();
+
+    var customerName = document.getElementById("customerName").value;
+    var customerPhone = document.getElementById("customerPhone").value;
+    var customerAddress = document.getElementById("customerAddress").value;
+    var customerCity = document.getElementById("customerCity").value;
+    var customerPincode = document.getElementById("customerPincode").value;
+
+    var payment = document.querySelector(
+        'input[name="payment"]:checked'
+    ).value;
+
+    var total = 0;
+
+    checkoutItems.forEach(function(item) {
+        total += item.price * item.quantity;
+    });
+
+    var order = {
+        orderId: "BB" + Date.now(),
+        username: username,
+        customerName: customerName,
+        phone: customerPhone,
+        address: customerAddress,
+        city: customerCity,
+        pincode: customerPincode,
+        payment: payment,
+        items: checkoutItems,
+        total: total,
+        status: "Ordered",
+        date: new Date().toLocaleString()
+    };
+
+    var orders = JSON.parse(
+        localStorage.getItem(username + "_orders")
+    ) || [];
+
+    orders.push(order);
+
+    localStorage.setItem(
+        username + "_orders",
+        JSON.stringify(orders)
+    );
+
+    if (checkoutType === "cart") {
+        cart = [];
+        displayCart();
+    }
+
+    document.getElementById("checkoutSection").style.display = "none";
+
+    document.getElementById("orderConfirmation").style.display = "block";
+
+    document.getElementById("orderConfirmation").innerHTML =
+        "<h2>Order Placed Successfully! 🎉</h2>" +
+        "<p>Thank you for shopping with Beauty Bliss.</p>" +
+        "<p><b>Order ID:</b> " + order.orderId + "</p>" +
+        "<p><b>Customer:</b> " + customerName + "</p>" +
+        "<p><b>Total Amount:</b> $" + total.toFixed(2) + "</p>" +
+        "<p><b>Payment:</b> " + payment + "</p>" +
+        "<p><b>Order Status:</b> " + order.status + "</p>" +
+        "<button onclick='showMyOrders()'>View My Orders</button>";
+
+    document.getElementById("checkoutForm").reset();
+
+    document.getElementById("orderConfirmation").scrollIntoView({
+        behavior: "smooth"
+    });
+}
+
+
+// Show My Orders
+
+function showMyOrders() {
+    var orders = JSON.parse(
+        localStorage.getItem(username + "_orders")
+    ) || [];
+
+    document.getElementById("checkoutSection").style.display = "none";
+    document.getElementById("orderConfirmation").style.display = "none";
+    document.getElementById("myOrdersSection").style.display = "block";
+
+    var output = "<h2>My Orders 📦</h2>";
+
+    if (orders.length === 0) {
+        output += "<p>You have not placed any orders yet.</p>";
+    }
+
+    orders.forEach(function(order) {
+        output +=
+            "<div class='order-item'>" +
+            "<h3>Order ID: " + order.orderId + "</h3>" +
+            "<p><b>Date:</b> " + order.date + "</p>" +
+            "<p><b>Total:</b> $" + order.total.toFixed(2) + "</p>" +
+            "<p><b>Status:</b> " + order.status + "</p>" +
+            "<p><b>Payment:</b> " + order.payment + "</p>" +
+            "<button onclick='viewOrder(\"" + order.orderId + "\")'>" +
+            "View Details</button>" +
+            "</div>";
+    });
+
+    output += "<button onclick='closeMyOrders()'>Close</button>";
+
+    document.getElementById("myOrdersSection").innerHTML = output;
+
+    document.getElementById("myOrdersSection").scrollIntoView({
+        behavior: "smooth"
+    });
+
+    document.getElementById("profileDropdown").style.display = "none";
+}
+
+
+// View Order Details
+
+function viewOrder(orderId) {
+    var orders = JSON.parse(
+        localStorage.getItem(username + "_orders")
+    ) || [];
+
+    var order = orders.find(function(item) {
+        return item.orderId === orderId;
+    });
+
+    if (!order) {
+        return;
+    }
+
+    var output = "<h2>Order Details</h2>";
+
+    output += "<p><b>Order ID:</b> " + order.orderId + "</p>";
+    output += "<p><b>Name:</b> " + order.customerName + "</p>";
+    output += "<p><b>Phone:</b> " + order.phone + "</p>";
+    output += "<p><b>Address:</b> " + order.address + ", " +
+        order.city + " - " + order.pincode + "</p>";
+
+    output += "<h3>Products</h3>";
+
+    order.items.forEach(function(item) {
+        output += "<p>" + item.title +
+            " - Quantity: " + item.quantity +
+            " - $" + (item.price * item.quantity).toFixed(2) +
+            "</p>";
+    });
+
+    output += "<h3>Total: $" + order.total.toFixed(2) + "</h3>";
+    output += "<p><b>Payment:</b> " + order.payment + "</p>";
+    output += "<p><b>Status:</b> " + order.status + "</p>";
+    output += "<button onclick='showMyOrders()'>Back to Orders</button>";
+
+    document.getElementById("myOrdersSection").innerHTML = output;
+}
+
+
+// Close My Orders
+
+function closeMyOrders() {
+    document.getElementById("myOrdersSection").style.display = "none";
+}

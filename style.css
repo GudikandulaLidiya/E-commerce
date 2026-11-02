@@ -638,3 +638,168 @@ body {
 #message {
     color: red;
 }
+.profile-menu {
+    position: relative;
+    display: inline-block;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.profile-menu {
+    position: relative;
+    display: inline-block;
+}
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #e75480;
+}
+
+.profile-dropdown {
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 0;
+    width: 230px;
+    min-height: 130px;
+    padding: 20px;
+    background: white;
+    border: 1px solid pink;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 9999;
+    font-size: 15px;
+}
+
+.profile-dropdown h3 {
+    font-size: 19px;
+}
+
+.profile-dropdown p {
+    font-size: 15px;
+    padding: 10px;
+}
+.profile-details {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    padding: 25px;
+    background: white;
+    border: 1px solid pink;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 10000;
+    text-align: center;
+}
+
+.profile-details h2 {
+    color: #d63384;
+}
+
+.profile-details button {
+    padding: 10px 20px;
+    background: #d63384;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.checkout-section {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 450px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 25px;
+    background: white;
+    border: 1px solid pink;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    z-index: 10000;
+    box-sizing: border-box;
+}
+
+.checkout-section h2 {
+    color: #d63384;
+    text-align: center;
+}
+
+.checkout-section input:not([type="radio"]),
+.checkout-section textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.checkout-section textarea {
+    height: 90px;
+}
+
+.checkout-section button {
+    padding: 10px 18px;
+    margin: 8px 5px;
+    background: #d63384;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.order-item {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+.top-bar {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 65px;
+    padding: 0 25px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    z-index: 999;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.top-bar h1 {
+    font-size: 23px;
+    margin: 0;
+}
+
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile-pic {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}
