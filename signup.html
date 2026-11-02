@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Beauty Bliss - Sign Up</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="login-box">
+        <h1>Beauty Bliss</h1>
+        <h3>Create Your Account</h3>
+
+        <input type="text" id="newUsername" placeholder="Enter Username">
+
+        <input type="password" id="newPassword" placeholder="Create Password">
+
+        <input type="password" id="confirmPassword" placeholder="Confirm Password">
+
+        <button onclick="signup()">Sign Up</button>
+
+        <p id="message"></p>
+
+        <p>Already have an account?
+            <a href="login.html">Login</a>
+        </p>
+    </div>
+
+    <script>
+        function signup() {
+            var username = document.getElementById("newUsername").value;
+            var password = document.getElementById("newPassword").value;
+            var confirmPassword = document.getElementById("confirmPassword").value;
+
+            if (username == "" || password == "" || confirmPassword == "") {
+                document.getElementById("message").innerHTML =
+                    "Please fill all fields";
+            }
+            else if (password != confirmPassword) {
+                document.getElementById("message").innerHTML =
+                    "Passwords do not match";
+            }
+            else {
+                var user = {
+                    username: username,
+                    password: password
+                };
+
+                localStorage.setItem("user", JSON.stringify(user));
+
+                alert("Account created successfully!");
+
+                window.location.href = "login.html";
+            }
+        }
+    </script>
+
+</body>
+</html>
