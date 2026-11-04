@@ -65,8 +65,6 @@ function loadCategories() {
 
     });
 
-    var output = '<option value="all">All Categories</option>';
-
     var buttonOutput = `
         <button class="selected"
             data-category="all"
@@ -76,10 +74,6 @@ function loadCategories() {
     `;
 
     categories.forEach(function(category) {
-
-        output += `
-            <option value="${category}">${category}</option>
-        `;
 
         buttonOutput += `
             <button
@@ -91,10 +85,7 @@ function loadCategories() {
 
     });
 
-    document.getElementById("categoryFilter").innerHTML = output;
-
-    document.getElementById("categoryButtons").innerHTML =
-        buttonOutput;
+    document.getElementById("categoryButtons").innerHTML = buttonOutput;
 }
 
 // Display products
@@ -177,7 +168,9 @@ function filterProducts() {
     var searchValue = document.getElementById("searchInput")
         .value.toLowerCase();
 
-    var categoryValue = document.getElementById("categoryFilter").value;
+    var categoryValue = document.querySelector(
+        ".category-buttons button.selected"
+    ).getAttribute("data-category");
 
     var filteredProducts = products.filter(function(product) {
 
@@ -192,23 +185,20 @@ function filterProducts() {
     });
 
     displayProducts(filteredProducts);
+}
+function selectCategory(category) {
 
     var buttons = document.querySelectorAll(".category-buttons button");
 
     buttons.forEach(function(button) {
 
-        if (button.getAttribute("data-category") === categoryValue) {
+        if (button.getAttribute("data-category") === category) {
             button.classList.add("selected");
         } else {
             button.classList.remove("selected");
         }
 
     });
-}
-
-function selectCategory(category) {
-
-    document.getElementById("categoryFilter").value = category;
 
     filterProducts();
 }
@@ -549,6 +539,34 @@ function openCheckout() {
 function closeCheckout() {
     document.getElementById("checkoutSection").style.display = "none";
 }
+function playOrderSound() {
+    var audio = new (window.AudioContext || window.webkitAudioContext)();
+
+    var notes = [523.25, 659.25, 783.99];
+
+    notes.forEach(function(frequency, index) {
+        var oscillator = audio.createOscillator();
+        var volume = audio.createGain();
+
+        oscillator.connect(volume);
+        volume.connect(audio.destination);
+
+        oscillator.frequency.value = frequency;
+        oscillator.type = "sine";
+
+        var startTime = audio.currentTime + index * 0.18;
+
+        volume.gain.setValueAtTime(0.3, startTime);
+        volume.gain.exponentialRampToValueAtTime(0.01, startTime + 0.25);
+
+        oscillator.start(startTime);
+        oscillator.stop(startTime + 0.25);
+    });
+
+    setTimeout(function() {
+        audio.close();
+    }, 1000);
+}
 
 
 // Place Order
@@ -607,15 +625,21 @@ function placeOrder(event) {
 
     document.getElementById("orderConfirmation").style.display = "block";
 
+    // Play order confirmation sound
+    playOrderSound();
+
+    // Show confirmation message
     document.getElementById("orderConfirmation").innerHTML =
-        "<h2>Order Placed Successfully! 🎉</h2>" +
-        "<p>Thank you for shopping with Beauty Bliss.</p>" +
-        "<p><b>Order ID:</b> " + order.orderId + "</p>" +
-        "<p><b>Customer:</b> " + customerName + "</p>" +
-        "<p><b>Total Amount:</b> $" + total.toFixed(2) + "</p>" +
-        "<p><b>Payment:</b> " + payment + "</p>" +
-        "<p><b>Order Status:</b> " + order.status + "</p>" +
-        "<button onclick='showMyOrders()'>View My Orders</button>";
+        "<div class='success-box'>" +
+            "<div class='success-icon'>✓</div>" +
+            "<h2>Yay! Order Confirmed!</h2>" +
+            "<p>Your order has been placed successfully.</p>" +
+            "<h3>Thank you for shopping with Beauty Bliss! 💗</h3>" +
+            "<p><b>Order ID:</b> " + order.orderId + "</p>" +
+            "<button onclick=\"showOrderDetails('" + order.orderId + "')\">" +
+                "View Details" +
+            "</button>" +
+        "</div>";
 
     document.getElementById("checkoutForm").reset();
 
@@ -623,8 +647,53 @@ function placeOrder(event) {
         behavior: "smooth"
     });
 }
+function showOrderDetails(orderId) {
 
+    var orders = JSON.parse(
+        localStorage.getItem(username + "_orders")
+    ) || [];
 
+    var order = orders.find(function(item) {
+        return item.orderId === orderId;
+    });
+
+    if (!order) {
+        alert("Order details not found!");
+        return;
+    }
+
+    var productDetails = "";
+
+    order.items.forEach(function(item) {
+        productDetails +=
+            "<p><b>" + item.title + "</b></p>" +
+            "<p>Quantity: " + item.quantity + "</p>" +
+            "<p>Price: $" + item.price.toFixed(2) + "</p>" +
+            "<hr>";
+    });
+
+    document.getElementById("orderConfirmation").innerHTML =
+        "<div class='success-box'>" +
+            "<h2>📦 Order Details</h2>" +
+            "<p><b>Order ID:</b> " + order.orderId + "</p>" +
+            "<p><b>Customer:</b> " + order.customerName + "</p>" +
+            "<p><b>Phone:</b> " + order.phone + "</p>" +
+            "<p><b>Address:</b> " + order.address + ", " +
+                order.city + " - " + order.pincode + "</p>" +
+            "<p><b>Order Date:</b> " + order.date + "</p>" +
+            "<hr>" +
+            "<h3>Products Ordered</h3>" +
+            productDetails +
+            "<h3>Total Amount: $" + order.total.toFixed(2) + "</h3>" +
+            "<p><b>Payment:</b> " + order.payment + "</p>" +
+            "<p><b>Status:</b> " + order.status + "</p>" +
+            "<button onclick='showMyOrders()'>My Orders</button>" +
+            "<button onclick='closeOrderDetails()' class='close-order-details'>&times;</button>" +
+        "</div>";
+}
+function closeOrderDetails() {
+    document.getElementById("orderConfirmation").style.display = "none";
+}
 // Show My Orders
 
 function showMyOrders() {

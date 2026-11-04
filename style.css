@@ -192,6 +192,7 @@ button:hover {
     margin: 0;
 }
 
+
 /* Wishlist Heart Icon */
 
 .wishlist-icon {
@@ -802,4 +803,83 @@ body {
     border-radius: 50%;
     object-fit: cover;
     cursor: pointer;
+}
+.success-box {
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 35px;
+    text-align: center;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.success-icon {
+    width: 75px;
+    height: 75px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: #e7f8ed;
+    color: #28a745;
+    font-size: 50px;
+    line-height: 75px;
+    font-weight: bold;
+}
+
+.success-box h2 {
+    color: #d63384;
+    margin-bottom: 15px;
+}
+
+.success-box button {
+    background: #e83e8c;
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 15px;
+}
+
+.success-box button:hover {
+    background: #c82370;
+}
+.close-order-details {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+    background: none !important;
+    color: #555 !important;
+    border: none;
+    font-size: 28px !important;
+    cursor: pointer;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.success-box {
+    position: relative;
+}
+/* Search bar inside existing navbar only */
+
+.top-bar .nav-search {
+    flex: 1;
+    max-width: 380px;
+    margin: 0 25px;
+}
+
+.top-bar #searchInput {
+    width: 100%;
+    padding: 10px 15px;
+    margin: 0;
+    border: 1px solid #edc4d7;
+    border-radius: 25px;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.top-bar #searchInput:focus {
+    border-color: #d94f89;
 }

@@ -15,6 +15,15 @@
 
     <h1>Beauty Products Shopping</h1>
 
+    <div class="nav-search">
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search products..."
+            onkeyup="filterProducts()"
+        >
+    </div>
+
     <div class="top-actions">
 
         <button class="wishlist-icon" onclick="toggleWishlistPanel()">
@@ -91,16 +100,9 @@
 
             <h2>Our Products</h2>
 
-            <input
-                type="text"
-                id="searchInput"
-                placeholder="Search beauty products..."
-                oninput="filterProducts()"
-            >
+     
 
-            <select id="categoryFilter" onchange="filterProducts()">
-                <option value="all">All Categories</option>
-            </select>
+        
 
             <!-- Quick Category Navigation -->
 
